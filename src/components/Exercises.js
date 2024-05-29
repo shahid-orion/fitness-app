@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import { Pagination } from '@mui/material'
 import { Box, Typography, Stack } from '@mui/material'
 import { exerciseOptions, fetchData } from '../utils/fetchData'
@@ -11,14 +10,12 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
   const exercisesPerPage = 9
   const indexOfLastExercise = currentPage * exercisesPerPage
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage
-  const currentExercises = exercises.slice(
-    indexOfFirstExercise,
-    indexOfLastExercise
-  )
+  const currentExercises = Array.isArray(exercises)
+    ? exercises.slice(indexOfFirstExercise, indexOfLastExercise)
+    : []
 
   const paginateHandler = (e, value) => {
     setCurrentPage(value)
-
     window.scrollTo({ top: '1650', behavior: 'smooth' })
   }
 
@@ -37,8 +34,14 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
           exerciseOptions
         )
       }
-      setExercises(exerciseData)
+
+      if (Array.isArray(exerciseData)) {
+        setExercises(exerciseData)
+      } else {
+        setExercises([])
+      }
     }
+
     fetchExercisesData()
   }, [bodyPart, setExercises])
 
@@ -58,7 +61,7 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
         ))}
       </Stack>
       <Stack mt="100px" alignItems="center">
-        {exercises.length > 9 && (
+        {Array.isArray(exercises) && exercises.length > 9 && (
           <Pagination
             color="standard"
             shape="rounded"

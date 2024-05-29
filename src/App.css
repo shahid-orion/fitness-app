@@ -138,3 +138,6 @@ body {
     width: 280px;
   }
 }
+.react-horizontal-scrolling-menu--inner-wrapper {
+  width: inherit !important;
+}
